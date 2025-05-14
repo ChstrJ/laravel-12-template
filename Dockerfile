@@ -10,7 +10,8 @@ COPY composer.json composer.lock ./
 RUN echo 'Copy composer json...'
 
 # Install dependencies (without dev)
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req=ext-mongodb --ignore-platform-req=ext-gd
+RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req=ext-mongodb --ignore-platform-req=ext-gd --ignore-platform-req=ext-zip
+
 
 RUN echo 'Installing deps...'
 
