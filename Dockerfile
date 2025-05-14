@@ -1,4 +1,4 @@
-FROM composer:lts AS build
+FROM composer:2 AS build
 
 WORKDIR /app
 
