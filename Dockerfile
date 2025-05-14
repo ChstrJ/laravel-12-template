@@ -9,41 +9,43 @@ COPY composer.json composer.lock ./
 
 RUN echo 'Copy composer json...'
 
-# Install dependencies (without dev)
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req=ext-mongodb --ignore-platform-req=ext-gd --ignore-platform-req=ext-zip
+# Install production dependencies
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --no-interaction \
+    --optimize-autoloader \
+    --ignore-platform-req=ext-* \
+    --no-scripts
 
-
-RUN echo 'Installing deps...'
-
+# Copy the rest of the application
 COPY . .
 
+# Stage 2: Production image
 FROM php:8.2-fpm-alpine
 
-RUN apk update && apk add --no-cache \
+# Install only essential runtime dependencies
+RUN apk add --no-cache \
+    nginx \
+    supervisor \
     bash \
-    curl \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    freetype-dev \
-    libzip-dev \
-    libxml2-dev \
-    oniguruma-dev \
-    unzip \
-    zip \
-    && docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
-        --with-webp \
-    && docker-php-ext-install \
-        zip \
-        pdo \
-        pdo_mysql \
-        mbstring \
-        xml \
-        zip \
-        gd \
-        bcmath
+    libpng \
+    libjpeg-turbo \
+    libwebp \
+    freetype \
+    libzip \
+    libxml2 \
+    oniguruma
+
+# Install required PHP extensions (minimal set)
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
+    docker-php-ext-install -j$(nproc) \
+    pdo_mysql \
+    mbstring \
+    xml \
+    gd \
+    opcache \
+    bcmath
 
 RUN echo 'Installing prod image'
 
