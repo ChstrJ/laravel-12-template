@@ -34,6 +34,7 @@ RUN apk update && apk add --no-cache \
         --with-jpeg \
         --with-webp \
     && docker-php-ext-install \
+        zip \
         pdo \
         pdo_mysql \
         mbstring \
