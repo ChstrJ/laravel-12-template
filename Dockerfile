@@ -18,17 +18,29 @@ COPY . .
 
 FROM php:8.2-fpm-alpine
 
-RUN apk update && \
-    apk add --no-cache \
+RUN apk update && apk add --no-cache \
     bash \
     curl \
-    libpng \
     libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    freetype-dev \
     libzip-dev \
-    libxml2 \
+    libxml2-dev \
     oniguruma-dev \
     unzip \
-    && docker-php-ext-install pdo pdo_mysql mbstring xml zip gd bcmath
+    && docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+    && docker-php-ext-install \
+        pdo \
+        pdo_mysql \
+        mbstring \
+        xml \
+        zip \
+        gd \
+        bcmath
 
 RUN echo 'Installing prod image'
 
