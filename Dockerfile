@@ -29,6 +29,7 @@ RUN apk update && apk add --no-cache \
     libxml2-dev \
     oniguruma-dev \
     unzip \
+    zip \
     && docker-php-ext-configure gd \
         --with-freetype \
         --with-jpeg \
