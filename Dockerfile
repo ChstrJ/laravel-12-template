@@ -1,4 +1,4 @@
-FROM composer:2.2-php8.2 AS build
+FROM ghcr.io/devgine/composer-php:v2-php8.2-alpine AS build
 
 WORKDIR /app
 
