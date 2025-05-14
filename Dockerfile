@@ -1,4 +1,4 @@
-FROM composer:2.2 AS build
+FROM composer:2.2-php8.2 AS build
 
 WORKDIR /app
 
